@@ -1,5 +1,6 @@
 package ru.otus.chat.server;
 
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server {
-    private int port;
+    private final int port;
     private List<ClientHandler> clients;
 
     public Server(int port) {
@@ -40,4 +41,30 @@ public class Server {
             client.sendMessage(message);
         }
     }
+
+
+    public synchronized boolean userExistance (String username){
+        for (ClientHandler c : clients) {
+            if (c.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public synchronized void privateMessage(ClientHandler sender, String message) {
+        String[] messageArray = message.split(" ", 3);
+        if (messageArray.length != 3) {
+            sender.sendMessage("Неверная команда");
+            return;
+        }
+        String recipient = messageArray[1];
+        String privateMessage = messageArray[2];
+        if (!this.isUserExists(recipient)) {
+            sender.sendMessage("Данного пользователя '" + recipient + "' не существует.");
+            return;
+        }
+
+
+    }
+
 }
