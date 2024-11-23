@@ -32,10 +32,18 @@ public class ClientHandler {
                     String message = in.readUTF();
                     if (message.startsWith("/")) {
                         if (message.startsWith("/exit")){
+
                             sendMessage("/exitok");
+
                             break;
                         }
-                        
+                        if (message.startsWith("/w")){
+
+                            server.sendPrivateMessage(this, message);
+                            break;
+                        }
+
+
 
                     } else {
                         server.broadcastMessage(username + " : " + message);
